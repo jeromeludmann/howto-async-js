@@ -1,4 +1,5 @@
-var log = require('debug')('promise');
+var log = require('debug')('generator');
+var co = require('co');
 
 var increment = function (value) {
   return new Promise(function (resolve, reject) {
@@ -11,10 +12,12 @@ var increment = function (value) {
 };
 
 module.exports = function (givenValue) {
-  increment(givenValue).then(function (value) {
+  co(function*() {
+    let value = yield increment(givenValue);
     log('value: ' + value);
 
-  }).catch(function (error) {
-    log(error.message);
+  }).catch(err => {
+    console.log(err.message);
   });
+
 };
