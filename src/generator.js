@@ -1,23 +1,23 @@
-var log = require('debug')('generator');
-var co = require('co');
-
-var increment = function (value) {
-  return new Promise(function (resolve, reject) {
-    if (value < 0) {
-      reject(new Error('must be positive'));
-    }
-
-    resolve(value + 1);
-  });
-};
+const log = require('debug')('generator');
+const increment = require('./increment').promise;
+const co = require('co');
 
 module.exports = function (givenValue) {
+
   co(function*() {
-    let value = yield increment(givenValue);
-    log('value: ' + value);
+    // first increment
+    let incremented = yield increment(givenValue);
+
+    // second increment
+    incremented = yield increment(incremented);
+
+    // third increment
+    incremented = yield increment(incremented);
+
+    log(incremented);
 
   }).catch(err => {
-    console.log(err.message);
+    log(err.message);
   });
 
 };

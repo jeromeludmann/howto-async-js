@@ -1,20 +1,22 @@
-var log = require('debug')('promise');
-
-var increment = function (value) {
-  return new Promise(function (resolve, reject) {
-    if (value < 0) {
-      reject(new Error('must be positive'));
-    }
-
-    resolve(value + 1);
-  });
-};
+const log = require('debug')('promise');
+const increment = require('./increment').promise;
 
 module.exports = function (givenValue) {
-  increment(givenValue).then(function (value) {
-    log('value: ' + value);
+
+  // first increment
+  increment(givenValue).then(function (incremented) {
+    // second increment
+    return increment(incremented);
+
+  }).then(function (incremented) {
+    // third increment
+    return increment(incremented);
+
+  }).then(function (incremented) {
+    log(incremented);
 
   }).catch(function (error) {
     log(error.message);
   });
+
 };

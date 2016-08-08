@@ -1,23 +1,33 @@
-var log = require('debug')('callback');
-
-var increment = function (value, callback) {
-  setTimeout(function () {
-    if (value < 0) {
-      return callback(new Error('must be positive'), null);
-    }
-
-    return callback(null, value + 1);
-  }, 0);
-};
+const log = require('debug')('callback');
+const increment = require('./increment').callback;
 
 module.exports = function (givenValue) {
-  increment(givenValue, function (error, value) {
+
+  // first increment
+  increment(givenValue, function (error, incremented) {
     if (error) {
       log(error.message);
       return;
     }
 
-    log('value: ' + value);
+    // second increment
+    increment(incremented, function (error, incremented) {
+      if (error) {
+        log(error.message);
+        return;
+      }
+
+      // third increment
+      increment(incremented, function (error, incremented) {
+        if (error) {
+          log(error.message);
+          return;
+        }
+
+        log(incremented);
+      });
+    });
   });
+
 };
 

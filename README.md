@@ -1,8 +1,9 @@
 # How to deal with asynchronous JavaScript
 
-Various implementations of asynchronous function that increments a value:
+Various implementations of asynchronous chained functions.
 
- - with callback `src/callback.js`
- - with promise `src/promise.js`
+ - with callbacks `src/callback.js`
+ - with promises `src/promise.js`
+ - with promises and generators `src/promise.js`
  
  

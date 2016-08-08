@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "description": "How to deal with asynchronous JavaScript",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "DEBUG=callback,promise,generator nodemon src/app.js 3"
+    "start": "DEBUG=callback,promise,generator nodemon src/app.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "async",
+    "callback",
+    "promise",
+    "generator",
+    "yield",
+    "co"
+  ],
+  "author": "Jérôme Ludmann",
   "license": "ISC",
   "dependencies": {
     "co": "^4.6.0",
