@@ -1,15 +1,20 @@
-const callback = require('./callback');
-const promise = require('./promise');
-const generator = require('./generator');
+require('source-map-support/register');
+require("babel-polyfill");
 
-callback(-1);
-callback(11);
-callback(1);
+var usingCallbacks = require('./es5');
+var usingPromises = require('./es6');
+var usingAsyncAwait = require('./es7');
 
-promise(-1);
-promise(11);
-promise(1);
+// Three asynchronous calls...
 
-generator(-1);
-generator(11);
-generator(1);
+usingCallbacks(-1);
+usingCallbacks(11);
+usingCallbacks(1);
+
+usingPromises(-1);
+usingPromises(11);
+usingPromises(1);
+
+usingAsyncAwait(-1);
+usingAsyncAwait(11);
+usingAsyncAwait(1);

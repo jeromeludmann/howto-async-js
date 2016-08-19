@@ -1,7 +1,8 @@
-const log = require('debug')('callback');
-const increment = require('./increment').callback;
+var log = require('debug')('callback');
+var increment = require('./increment').callback;
 
 module.exports = function (givenValue) {
+  // ES5
 
   // first increment
   increment(givenValue, function (error, incremented) {
@@ -28,6 +29,4 @@ module.exports = function (givenValue) {
       });
     });
   });
-
 };
-

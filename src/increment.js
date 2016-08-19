@@ -1,3 +1,9 @@
+/**
+ * Callback implementation of increment
+ *
+ * @param value
+ * @param callback
+ */
 const callback = function (value, callback) {
   setTimeout(function () {
     if (value < 0) {
@@ -12,6 +18,12 @@ const callback = function (value, callback) {
   }, 0);
 };
 
+/**
+ * Promise implementation of increment
+ *
+ * @param value
+ * @returns {Promise}
+ */
 const promise = function (value) {
   return new Promise(function (resolve, reject) {
     if (value < 0) {
