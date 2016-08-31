@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf build",
     "build": "babel src --source-maps -d build",
-    "start": "DEBUG=callback,promise,async node build/app.js",
+    "start": "DEBUG=callback,promise,async node --require source-map-support/register build/app.js",
     "watch": "nodemon --watch src --exec 'npm-run-all -s build start'"
   },
   "keywords": [

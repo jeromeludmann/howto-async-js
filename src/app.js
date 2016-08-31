@@ -1,5 +1,3 @@
-require('source-map-support/register');
-
 var usingCallbacks = require('./es5');
 var usingPromises = require('./es6');
 var usingAsyncAwait = require('./es7');
