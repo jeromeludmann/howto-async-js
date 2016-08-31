@@ -4,25 +4,28 @@ Various implementations of asynchronous chained functions.
 
 The function `increment()` has two implementations: using callback and promise.
 
-## Using callbacks (vanilla ES5 JavaScript)
+## ES5 JavaScript
+
+### Using callbacks
 
 ```js
-  // first increment
-  increment(givenValue, function (error, incremented) {
+var log = require('debug')('callback');
+var increment = require('./increment').callback;
+
+module.exports = function (givenValue) {
+  increment(givenValue, function (error, incremented) { // first increment
     if (error) {
       log(error.message);
       return;
     }
 
-    // second increment
-    increment(incremented, function (error, incremented) {
+    increment(incremented, function (error, incremented) { // second increment
       if (error) {
         log(error.message);
         return;
       }
 
-      // third increment
-      increment(incremented, function (error, incremented) {
+      increment(incremented, function (error, incremented) { // third increment
         if (error) {
           log(error.message);
           return;
@@ -32,51 +35,60 @@ The function `increment()` has two implementations: using callback and promise.
       });
     });
   });
+};
+
 ```
 
-## Using ES6 `Promises`
+## ES2015 (ES6)
+
+### Using `Promise`
 
 ```js
-// first increment
-  increment(givenValue)
+import debug from 'debug';
+import {promise as increment} from './increment';
 
-      .then(function (incremented) {
-        // second increment
-        return increment(incremented);
-      })
+const log = debug('promise');
 
-      .then(function (incremented) {
-        // third increment
-        return increment(incremented);
-      })
+export default function (givenValue) {
+  increment(givenValue).then(function (incremented) { // first increment
+    return increment(incremented); // second increment
 
-      .then(function (incremented) {
-        log(incremented);
-      })
+  }).then(function (incremented) {
+    return increment(incremented); // third increment
 
-      .catch(function (error) {
-        log(error.message);
-      });
+  }).then(function (incremented) {
+    log(incremented);
+
+  }).catch(function (error) {
+    log(error.message);
+  });
+};
 ```
+
+### Using `Promise` and `co`
+
+    TODO
  
-## Using promises and ES7 `async/await`
+## ES2017 (ES8?)
+ 
+### Using `Promise` and `async`/`await` keywords
  
  ```js
-   try {
-     // first increment
-     let incremented = await increment(givenValue);
- 
-     // second increment
-     incremented = await increment(incremented);
- 
-     // third increment
-     incremented = await increment(incremented);
- 
-     log(incremented);
- 
-   } catch (err) {
-     log(err.message);
-   }
- ```
- 
- 
+import debug from 'debug';
+import {promise as increment} from './increment';
+
+const log = debug('async/await');
+
+export default async function (givenValue) {
+  try {
+    let incremented = await increment(givenValue); // first increment
+    incremented = await increment(incremented); // second increment
+    incremented = await increment(incremented); // third increment
+    
+    log(incremented);
+
+  } catch (err) {
+    log(err.message);
+  }
+};
+```
