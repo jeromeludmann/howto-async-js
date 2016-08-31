@@ -5,9 +5,8 @@
   "scripts": {
     "clean": "rimraf build",
     "build": "babel src --source-maps -d build",
-    "prestart": "npm run build",
-    "start": "DEBUG=callback,promise,async nodemon --watch build build/app.js",
-    "watch": "run-p 'build -- --watch' start"
+    "start": "DEBUG=callback,promise,async node build/app.js",
+    "watch": "nodemon --watch src --exec 'npm-run-all -s build start'"
   },
   "keywords": [
     "async",
@@ -24,7 +23,7 @@
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
-    "babel-polyfill": "^6.13.0",
+    "babel-plugin-transform-runtime": "^6.12.0",
     "babel-preset-es2015": "^6.13.2",
     "nodemon": "^1.10.0",
     "rimraf": "^2.5.4"
