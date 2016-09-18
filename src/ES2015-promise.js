@@ -1,21 +1,17 @@
-import debug from 'debug';
-import increment from './lib/increment';
-import promisify from 'es6-promisify';
-
-const log = debug('asyncjs:promise');
-const incrementPromise = promisify(increment);
+import increment from './lib/increment-promise';
 
 export default function (givenValue) {
-  incrementPromise(givenValue).then(function (incremented) { // first increment
-    return incrementPromise(incremented); // second increment
 
-  }).then(function (incremented) {
-    return incrementPromise(incremented); // third increment
+  return increment(givenValue)  // first increment
 
-  }).then(function (incremented) {
-    log(incremented);
+    .then(function (incremented) {
+      return increment(incremented);  // second increment
+    })
 
-  }).catch(function (error) {
-    log(error.message);
-  });
-};
+    .then(function (incremented) {
+      return increment(incremented);  // third increment
+    })
+
+    .catch((err) => err);
+
+}
