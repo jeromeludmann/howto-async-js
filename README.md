@@ -1,42 +1,33 @@
 # How to deal with asynchronous JavaScript
 
-Various implementations of asynchronous chained functions.
-
-The function `increment()` has two implementations: using callback and promise.
-
 ## ES5 JavaScript
 
 ### Using callbacks
 
 ```js
-var log = require('debug')('callback');
-var increment = require('./increment').callback;
+function (givenValue) {
 
-module.exports = function (givenValue) {
-  increment(givenValue, function (error, incremented) { // first increment
-    if (error) {
-      log(error.message);
-      return;
+  increment(givenValue, function (err, incremented) { // first increment
+    if (err) {
+      return callback(err, undefined);
     }
 
-    increment(incremented, function (error, incremented) { // second increment
-      if (error) {
-        log(error.message);
-        return;
+    increment(incremented, function (err, incremented) { // second increment
+      if (err) {
+        return callback(err, undefined);
       }
 
-      increment(incremented, function (error, incremented) { // third increment
-        if (error) {
-          log(error.message);
-          return;
+      increment(incremented, function (err, incremented) { // third increment
+        if (err) {
+          return callback(err, undefined);
         }
 
-        log(incremented);
+        return callback(null, incremented);
       });
     });
   });
-};
-
+  
+}
 ```
 
 ## ES2015 (ES6)
@@ -44,51 +35,55 @@ module.exports = function (givenValue) {
 ### Using `Promise`
 
 ```js
-import debug from 'debug';
-import {promise as increment} from './increment';
+function (givenValue) {
 
-const log = debug('promise');
+  return increment(givenValue)  // first increment
 
-export default function (givenValue) {
-  increment(givenValue).then(function (incremented) { // first increment
-    return increment(incremented); // second increment
+    .then(function (incremented) {
+      return increment(incremented);  // second increment
+    })
 
-  }).then(function (incremented) {
-    return increment(incremented); // third increment
+    .then(function (incremented) {
+      return increment(incremented);  // third increment
+    })
 
-  }).then(function (incremented) {
-    log(incremented);
-
-  }).catch(function (error) {
-    log(error.message);
-  });
-};
+    .catch((err) => err);
+    
+}
 ```
 
-### Using `Promise` and `co`
+### Using `Promise` with generators and `co`
 
-    TODO
- 
-## ES2017 (ES8?)
- 
-### Using `Promise` and `async`/`await` keywords
- 
- ```js
-import debug from 'debug';
-import {promise as increment} from './increment';
+```js
+import co from 'co';
 
-const log = debug('async/await');
+function (givenValue) {
 
-export default async function (givenValue) {
+  return co(function * () {
+    let incremented = yield increment(givenValue); // first increment
+    incremented = yield increment(incremented); // second increment
+    return increment(incremented); // third increment
+
+  }).catch((err) => err);
+  
+}
+```
+
+## ES2017 (ES8)
+ 
+### Using `Promise` with `async`/`await` keywords
+ 
+```js
+function (givenValue) {
+
   try {
     let incremented = await increment(givenValue); // first increment
     incremented = await increment(incremented); // second increment
-    incremented = await increment(incremented); // third increment
-    
-    log(incremented);
+    return increment(incremented); // third increment
 
   } catch (err) {
-    log(err.message);
+    return err;
   }
-};
+  
+}
 ```
