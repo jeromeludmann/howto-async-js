@@ -1,27 +1,25 @@
-var log = require('debug')('asyncjs:callback');
-var increment = require('./lib/increment');
+var increment = require('./lib/increment-callback');
 
-module.exports = function (givenValue) {
-  increment(givenValue, function (error, incremented) { // first increment
-    if (error) {
-      log(error.message);
-      return;
+module.exports = function (givenValue, callback) {
+
+  increment(givenValue, function (err, incremented) { // first increment
+    if (err) {
+      return callback(err, undefined);
     }
 
-    increment(incremented, function (error, incremented) { // second increment
-      if (error) {
-        log(error.message);
-        return;
+    increment(incremented, function (err, incremented) { // second increment
+      if (err) {
+        return callback(err, undefined);
       }
 
-      increment(incremented, function (error, incremented) { // third increment
-        if (error) {
-          log(error.message);
-          return;
+      increment(incremented, function (err, incremented) { // third increment
+        if (err) {
+          return callback(err, undefined);
         }
 
-        log(incremented);
+        return callback(null, incremented);
       });
     });
   });
+
 };

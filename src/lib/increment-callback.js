@@ -1,4 +1,4 @@
-export default function increment (value, callback) {
+function incrementCallback (value, callback) {
   setTimeout(function () {
     if (value < 0) {
       return callback(new Error(value + ': must be positive'), null);
@@ -11,3 +11,5 @@ export default function increment (value, callback) {
     return callback(null, value + 1);
   }, 0);
 }
+
+module.exports = incrementCallback;
